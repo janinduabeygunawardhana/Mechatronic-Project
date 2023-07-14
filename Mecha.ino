@@ -16,28 +16,52 @@ void setup()
   pinMode(directionPin, OUTPUT);
   pinMode(2,INPUT);
 
-  digitalWrite(directionPin,HIGH);
-
 
 }
 
 void loop()
 {
-  Serial.println(isSafe);
-  if (isSafe == true){
-    for (int stepCount = 1; stepCount < 200; stepCount++){
-      digitalWrite(stepPin, HIGH);
-      delayMicroseconds(1000);
-      digitalWrite(stepPin, LOW);
-      delayMicroseconds(1000);
-    }  
+  if(isSafe){
+    Serial.println("Running");
+    liftDown(1000);  
   }
- delay(250);
+  else{
+    liftUp(400);
+  }
+  
+  //liftDown(10);
+  delay(100);
+  
 }
 
 
-void liftUp(){
-  
+void liftUp(int steps){
+  digitalWrite(directionPin,HIGH);
+  for (int stepCount = 1; stepCount < steps; stepCount++){
+    if(isSafe){
+      break;  
+    }
+    Serial.println("Lifting Up");
+    digitalWrite(stepPin, HIGH);
+    delayMicroseconds(1000);
+    digitalWrite(stepPin, LOW);
+    delayMicroseconds(1000);
+  }   
+}
+
+
+int liftDown(int steps){
+  digitalWrite(directionPin,LOW);
+  for (int stepCount = 1; stepCount < steps; stepCount++){
+    if(!isSafe){
+      break;  
+    }
+    Serial.println("Lifting Down");
+    digitalWrite(stepPin, HIGH);
+    delayMicroseconds(1000);
+    digitalWrite(stepPin, LOW);
+    delayMicroseconds(1000);
+  }   
 }
 
 
