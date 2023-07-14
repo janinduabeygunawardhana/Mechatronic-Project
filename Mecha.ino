@@ -10,35 +10,40 @@ int directionPin = 4;
 void setup()
 { 
   Serial.begin(9600);
-  //attachInterrupt(digitalPinToInterrupt(interruptPin), StepperLimit, HIGH);
+  attachInterrupt(digitalPinToInterrupt(interruptPin), StepperLimitPressed, HIGH);
   //attachInterrupt(digitalPinToInterrupt(interruptPin), StepperLimitL, HIGH);
   // configure the sensors
   
   pinMode(stepPin, OUTPUT);
   pinMode(directionPin, OUTPUT);
+  pinMode(2,INPUT);
 
-  pinMode(2, INPUT);
+  digitalWrite(directionPin,HIGH);
 
 
 }
 
 void loop()
 {
-  for (int stepCount = 1; stepCount < 200; stepCount++){
-    digitalWrite(stepPin, HIGH);
-    delayMicroseconds(4000);
-    digitalWrite(stepPin, LOW);
-    delayMicroseconds(4000);
-  }   
+  Serial.begin
+  if (isSafe == true){
+    for (int stepCount = 1; stepCount < 200; stepCount++){
+      digitalWrite(stepPin, HIGH);
+      delayMicroseconds(1000);
+      digitalWrite(stepPin, LOW);
+      delayMicroseconds(1000);
+    }  
+  }
+ 
 }
 
-//void StepperLimit()
-//{
-//  Serial.print("pressed , ");
-//  isSafe = false;
-//  Serial.println(isSafe);
-//}
-//
+void StepperLimitPressed()
+{
+  Serial.print("pressed , ");
+  isSafe = false;
+  Serial.println(isSafe);
+}
+
 //void StepperLimitL()
 //{
 //  Serial.print("pressed , ");
