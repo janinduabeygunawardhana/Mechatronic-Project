@@ -10,9 +10,7 @@ int directionPin = 4;
 void setup()
 { 
   Serial.begin(9600);
-  attachInterrupt(digitalPinToInterrupt(interruptPin), StepperLimitPressed, CHANGE);
-  //attachInterrupt(digitalPinToInterrupt(interruptPin), StepperLimitReleased, FALLING);
-  // configure the sensors
+  attachInterrupt(digitalPinToInterrupt(interruptPin), StepperLimitChanged, CHANGE);
   
   pinMode(stepPin, OUTPUT);
   pinMode(directionPin, OUTPUT);
@@ -37,7 +35,14 @@ void loop()
  delay(250);
 }
 
-void StepperLimitPressed()
+
+void liftUp(){
+  
+}
+
+
+
+void StepperLimitChanged()
 {
   if (digitalRead(2)){
     Serial.print("pressed , ");
@@ -53,12 +58,4 @@ void StepperLimitPressed()
     Serial.print(" Is Safe : ");
     Serial.println(isSafe);  
   }
-
-}
-
-void StepperLimitReleased()
-{
-  Serial.print("Released , ");
-  isSafe = true;
-  Serial.println(isSafe);
 }
