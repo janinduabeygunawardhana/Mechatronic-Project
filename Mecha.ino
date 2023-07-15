@@ -1,12 +1,13 @@
 const byte interruptPin = 2;
 bool isSafe = true;
+bool calibrated = false;
 
 int stepPin = 3;
 int directionPin = 4;
 
 void StepperLimitChanged(){
   if (digitalRead(2)){
-    Serial.print("pressed , ");
+    Serial.print("Released , ");
     Serial.print(digitalRead(2));
     isSafe = true;
     Serial.print(" Is Safe : ");
@@ -17,7 +18,11 @@ void StepperLimitChanged(){
     Serial.print(digitalRead(2)); 
     isSafe = false;
     Serial.print(" Is Safe : ");
-    Serial.println(isSafe);  
+    Serial.println(isSafe);
+
+    if(calibrated){
+      error();
+    }
   }
 }
 
@@ -33,7 +38,8 @@ void setup() {
 }
 
 void loop() {
-
+  StoreL2Rack();
+  delay(1000);
 }
 
 void liftUp(int stp){
@@ -66,5 +72,23 @@ void CalibrateLifter(){
   while(isSafe){
     liftDown(200);
   }
+ liftUp(100);
+ calibrated = true;
  Serial.println("Calibration Successfull");
+ delay(1000);
+}
+
+void StoreL2Rack(){
+  int stp = 2400;
+  liftUp(stp);
+  delay(2000);
+  liftDown(stp);
+  delay(500);
+}
+void error(){
+  while(true){
+    Serial.println("error occured: Press Reset");
+    delay(250);    
+  }
+
 }
