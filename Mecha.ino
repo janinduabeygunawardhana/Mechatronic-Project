@@ -33,20 +33,12 @@ void setup() {
 }
 
 void loop() {
-  while (Serial.available() == 0) {
-  }
-  int stp = Serial.parseInt();
 
-  liftUp(stp);  
-  
-  delay(1000);
-  liftDown(stp); 
-  delay(1000);
 }
 
 void liftUp(int stp){
   digitalWrite(directionPin, HIGH);
-
+  Serial.println("UP");
   for (int stepCount = 1; stepCount < stp; stepCount++){
     digitalWrite(stepPin, HIGH);
     delayMicroseconds(1000);
@@ -57,7 +49,7 @@ void liftUp(int stp){
 
 void liftDown(int stp){
   digitalWrite(directionPin, LOW);
-
+  Serial.println("Down");
   for (int stepCount = 1; stepCount < stp; stepCount++){
     if(!isSafe){
       break;  
@@ -70,9 +62,9 @@ void liftDown(int stp){
 }
 
 void CalibrateLifter(){
-  liftUp(400);
+  liftUp(200);
   while(isSafe){
-    liftDown(5000);
+    liftDown(200);
   }
  Serial.println("Calibration Successfull");
 }
