@@ -1,4 +1,11 @@
 //variable for lifting
+//Motor pin Red Out b
+//Motor pin Black Out a
+//Input vialot GND
+//Input yellow tied Input pin 1
+//Input yellow Input pin 2
+//Input a outputPin 1
+//Input b outputPin 2
 const byte interruptPin = 2;
 bool isSafe = true;
 bool calibrated = false;
@@ -7,8 +14,9 @@ int stepPin = 3;
 int directionPin = 4;
 
 //variables for pushin mechamism
+
 int Run = 0; // use Run = 1 to actuate one time
-int inputPin1 = 4;
+int inputPin1 = 8;
 int inputPin2 = 5;
 int outputPin1 = 6;
 int outputPin2 = 7;
@@ -44,10 +52,10 @@ void setup() {
   //define pins for pushing
   pinMode (outputPin1,OUTPUT);
   pinMode (outputPin2,OUTPUT);
-  pinMode (inputPin1,INPUT);
-  pinMode (inputPin2,INPUT);
-
-  while(digitalRead(inputPin1)==0){
+  pinMode (inputPin1,INPUT_PULLUP);
+  pinMode (inputPin2,INPUT_PULLUP);
+  
+  while(digitalRead(inputPin1)==1){
     digitalWrite(outputPin1,HIGH);
     digitalWrite(outputPin2,LOW);
   }
@@ -116,11 +124,11 @@ void error(){
 
 void push(int x){
   if(x==1){
-  while(digitalRead(inputPin2)==0){
+  while(digitalRead(inputPin2)==1){
     digitalWrite(outputPin1,LOW);
     digitalWrite(outputPin2,HIGH);
   }
-  while(digitalRead(inputPin1)==0){
+  while(digitalRead(inputPin1)==1){
     digitalWrite(outputPin1,HIGH);
     digitalWrite(outputPin2,LOW);
   }
