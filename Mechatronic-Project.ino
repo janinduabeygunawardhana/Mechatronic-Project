@@ -7,7 +7,7 @@ int stepPin = 3;
 int directionPin = 4;
 
 //variables for pushin mechamism
-int Run = 1; // use Run = 1 to actuate one time
+int Run = 0; // use Run = 1 to actuate one time
 int inputPin1 = 4;
 int inputPin2 = 5;
 int outputPin1 = 6;
@@ -71,6 +71,7 @@ void liftUp(int stp){
     digitalWrite(stepPin, LOW);
     delayMicroseconds(1000);
   }
+  Run = 1;
 }
 
 void liftDown(int stp){
@@ -101,7 +102,7 @@ void CalibrateLifter(){
 void StoreL2Rack(){
   int stp = 2400;
   liftUp(stp);
-  delay(2000);
+  push(Run);
   liftDown(stp);
   delay(500);
 }
