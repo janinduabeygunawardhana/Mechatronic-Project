@@ -1,9 +1,17 @@
+//variable for lifting
 const byte interruptPin = 2;
 bool isSafe = true;
 bool calibrated = false;
 
 int stepPin = 3;
 int directionPin = 4;
+
+//variables for pushin mechamism
+int Run = 1; // use Run = 1 to actuate one time
+int inputPin1 = 4;
+int inputPin2 = 5;
+int outputPin1 = 6;
+int outputPin2 = 7;
 
 void StepperLimitChanged(){
   if (digitalRead(2)){
@@ -33,6 +41,18 @@ void setup() {
   pinMode(directionPin, OUTPUT);
   pinMode(2,INPUT);
 
+  //define pins for pushing
+  pinMode (outputPin1,OUTPUT);
+  pinMode (outputPin2,OUTPUT);
+  pinMode (inputPin1,INPUT);
+  pinMode (inputPin2,INPUT);
+
+  while(digitalRead(inputPin1)==0){
+    digitalWrite(outputPin1,HIGH);
+    digitalWrite(outputPin2,LOW);
+  }
+  digitalWrite(outputPin1,LOW);
+  digitalWrite(outputPin2,LOW);
   CalibrateLifter();
 
 }
@@ -91,4 +111,20 @@ void error(){
     delay(250);    
   }
 
+}
+
+void push(int x){
+  if(x==1){
+  while(digitalRead(inputPin2)==0){
+    digitalWrite(outputPin1,LOW);
+    digitalWrite(outputPin2,HIGH);
+  }
+  while(digitalRead(inputPin1)==0){
+    digitalWrite(outputPin1,HIGH);
+    digitalWrite(outputPin2,LOW);
+  }
+  digitalWrite(outputPin1,LOW);
+  digitalWrite(outputPin2,LOW);
+  Run = 0;
+  }
 }
