@@ -1,4 +1,3 @@
-//check
 const byte interruptPin = 2;
 bool isSafe = true;
 bool calibrated = false;
