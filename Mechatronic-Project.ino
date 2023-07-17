@@ -1,9 +1,25 @@
+//variable for lifting
+//Motor pin Red Out b
+//Motor pin Black Out a
+//Input vialot GND
+//Input yellow tied Input pin 1
+//Input yellow Input pin 2
+//Input a outputPin 1
+//Input b outputPin 2
 const byte interruptPin = 2;
 bool isSafe = true;
 bool calibrated = false;
 
 int stepPin = 3;
 int directionPin = 4;
+
+//variables for pushin mechamism
+
+int Run = 0; // use Run = 1 to actuate one time
+int inputPin1 = 8;
+int inputPin2 = 5;
+int outputPin1 = 6;
+int outputPin2 = 7;
 
 void StepperLimitChanged(){
   if (digitalRead(2)){
@@ -33,6 +49,18 @@ void setup() {
   pinMode(directionPin, OUTPUT);
   pinMode(2,INPUT);
 
+  //define pins for pushing
+  pinMode (outputPin1,OUTPUT);
+  pinMode (outputPin2,OUTPUT);
+  pinMode (inputPin1,INPUT_PULLUP);
+  pinMode (inputPin2,INPUT_PULLUP);
+  
+  while(digitalRead(inputPin1)==1){
+    digitalWrite(outputPin1,HIGH);
+    digitalWrite(outputPin2,LOW);
+  }
+  digitalWrite(outputPin1,LOW);
+  digitalWrite(outputPin2,LOW);
   CalibrateLifter();
 
 }
@@ -51,6 +79,7 @@ void liftUp(int stp){
     digitalWrite(stepPin, LOW);
     delayMicroseconds(1000);
   }
+  Run = 1;
 }
 
 void liftDown(int stp){
@@ -81,7 +110,7 @@ void CalibrateLifter(){
 void StoreL2Rack(){
   int stp = 2400;
   liftUp(stp);
-  delay(2000);
+  push(Run);
   liftDown(stp);
   delay(500);
 }
@@ -91,4 +120,20 @@ void error(){
     delay(250);    
   }
 
+}
+
+void push(int x){
+  if(x==1){
+  while(digitalRead(inputPin2)==1){
+    digitalWrite(outputPin1,LOW);
+    digitalWrite(outputPin2,HIGH);
+  }
+  while(digitalRead(inputPin1)==1){
+    digitalWrite(outputPin1,HIGH);
+    digitalWrite(outputPin2,LOW);
+  }
+  digitalWrite(outputPin1,LOW);
+  digitalWrite(outputPin2,LOW);
+  Run = 0;
+  }
 }
