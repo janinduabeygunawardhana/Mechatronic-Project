@@ -37,6 +37,10 @@ void setup() {
 }
 
 void loop() {
+  Read_Data();
+}
+
+void Read_Data(){
   if (radio.available()) {
     radio.read(&data, sizeof(Data_Package));
     
