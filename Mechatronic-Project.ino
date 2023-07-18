@@ -68,6 +68,8 @@ void setup() {
 void loop() {
   StoreL2Rack();
   delay(1000);
+  StoreL1Rack();
+  delay(1000);
 }
 
 void liftUp(int stp){
@@ -114,6 +116,12 @@ void StoreL2Rack(){
   liftDown(stp);
   delay(500);
 }
+
+void StoreL1Rack(){
+  push(Run);
+  delay(500);
+}
+
 void error(){
   while(true){
     Serial.println("error occured: Press Reset");
