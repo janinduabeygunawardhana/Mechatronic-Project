@@ -1,3 +1,7 @@
+#include <SPI.h>
+#include <nRF24L01.h>
+#include <RF24.h>
+
 //variable for lifting
 //Motor pin Red Out b
 //Motor pin Black Out a
@@ -6,20 +10,36 @@
 //Input yellow Input pin 2
 //Input a outputPin 1
 //Input b outputPin 2
+
+RF24 radio(7, 8); // CE, CSN
+
+int LED_pin1 = 2;
+int LED_pin2 = 3;
+
+const byte address[6] = "00001";
+
+// Max size of this struct is 32 bytes - NRF24L01 buffer limit
+struct Data_Package {
+  bool is_Cell1_empty = false;
+  bool is_Cell2_empty = false;
+};
+
+Data_Package data; //Create a variable with the above structure
+
 const byte interruptPin = 2;
 bool isSafe = true;
 bool calibrated = false;
 
-int stepPin = 3;
-int directionPin = 4;
+int stepPin = 14;
+int directionPin = 15;
 
 //variables for pushin mechamism
 
 int Run = 0; // use Run = 1 to actuate one time
-int inputPin1 = 8;
-int inputPin2 = 5;
-int outputPin1 = 6;
-int outputPin2 = 7;
+int inputPin1 = 24;
+int inputPin2 = 25;
+int outputPin1 = 26;
+int outputPin2 = 27;
 
 void StepperLimitChanged(){
   if (digitalRead(2)){
@@ -45,6 +65,12 @@ void StepperLimitChanged(){
 void setup() {
   attachInterrupt(digitalPinToInterrupt(interruptPin), StepperLimitChanged, CHANGE);
   Serial.begin(9600);
+
+  radio.begin();
+  radio.openReadingPipe(0, address);
+  radio.setPALevel(RF24_PA_MIN);
+  radio.startListening();
+  
   pinMode(stepPin, OUTPUT);
   pinMode(directionPin, OUTPUT);
   pinMode(2,INPUT);
@@ -146,5 +172,36 @@ void push(int x){
   digitalWrite(outputPin1,LOW);
   digitalWrite(outputPin2,LOW);
   Run = 0;
+  }
+}
+
+void Read_Data(){
+  if (radio.available()) {
+    radio.read(&data, sizeof(Data_Package));
+    
+    Serial.print("is_Cell1_empty : ");
+    Serial.println(data.is_Cell1_empty);
+    Serial.print("is_Cell2_empty : ");
+    Serial.println(data.is_Cell2_empty);
+    
+    if(data.is_Cell1_empty){
+      //digitalWrite(LED_pin1,HIGH);
+      Serial.println("LED_1 high");
+    }
+    else{
+      //digitalWrite(LED_pin1,LOW);
+      Serial.println("LED_1 low");
+    }
+
+    if(data.is_Cell2_empty){
+      //digitalWrite(LED_pin2,HIGH);
+      Serial.println("LED_2 high");
+    }
+    else{
+      //digitalWrite(LED_pin2,LOW);
+      Serial.println("LED_2 low");
+    }
+    Serial.println();
+    
   }
 }

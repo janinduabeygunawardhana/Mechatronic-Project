@@ -35,14 +35,14 @@ void setup() {
 void loop() {
   Serial.println(hc.dist());
   Serial.println(hc2.dist());
-  if(hc.dist()>8 or hc.dist() == 0.00){
+  if(hc.dist()>10 or hc.dist() == 0.00){
     data.is_Cell1_empty = true;
   }
   else{
     data.is_Cell1_empty = false;
   }
   
-  if(hc2.dist()>8 or hc2.dist() == 0.00){
+  if(hc2.dist()>10 or hc2.dist() == 0.00){
     data.is_Cell2_empty = true;
   }
   else{
