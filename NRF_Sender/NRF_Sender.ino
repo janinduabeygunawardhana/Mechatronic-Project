@@ -9,8 +9,8 @@
 #include <HCSR04.h>
 
 RF24 radio(7, 8); // CE, CSN
-HCSR04 hc(5, 6); //initialisation class HCSR04 rack 1 (trig pin , echo pin)
-HCSR04 hc2(2, 3); //initialisation class HCSR04 rack 1 (trig pin , echo pin)
+HCSR04 hc2(5, 6); //initialisation class HCSR04 rack 1 (trig pin , echo pin)
+HCSR04 hc(3, 4); //initialisation class HCSR04 rack 1 (trig pin , echo pin)
 
 const byte address[6] = "00001";
 
